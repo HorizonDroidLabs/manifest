@@ -1,36 +1,93 @@
-LineageOS
-===========
+# HorizonDroid
 
-Getting started
----------------
+![HorizonDroid](https://github.com/HorizonDroidLab/.github/blob/main/Aquila_Update%20ROM.png)
 
-To get started with Android/LineageOS, you'll need to get familiar with [Source Control Tools](https://source.android.com/setup/develop).
+## Getting Started
 
-To initialize your local repository using the LineageOS trees, use a command like this:
+To get started with the HorizonDroid sources, you'll need to get
+familiar with [Git and Repo](https://source.android.com/setup/build/downloading).
+Make sure your build environment is properly set up by following the [LineageOS build guide](https://wiki.lineageos.org/devices/).
+
+To initialize your local repository, use command:
+
+```bash
+repo init -u https://github.com/HorizonDroidLabs/manifest.git -b fifteen --git-lfs
 ```
-repo init -u https://github.com/LineageOS/android.git -b lineage-22.2 --git-lfs
-```
-Then to sync up:
-```
+
+Then sync up:
+
+```bash
 repo sync
 ```
-Please see the [LineageOS Wiki](https://wiki.lineageos.org/) for building instructions, by device.
+```bash
+repo sync -c --force-sync --optimized-fetch --no-tags --no-clone-bundle --prune --retry-fetches=5 -j10
+```
 
+## Building the System
 
-Submitting patches
-------------------
-Patches are always welcome! Please submit your patches via LineageOS Gerrit!
+Initialize the ROM environment with the envsetup.sh script.
 
-Simply follow our guide on [how to submit patches](https://wiki.lineageos.org/submitting-patch-howto.html).
+```bash
+. build/envsetup.sh
+```
 
-To view the status of your and others' patches, visit [LineageOS Gerrit Code Review](https://review.lineageos.org/).
+Lunch your device after cloning all device sources if needed.
 
+```bash
+lunch horizon_devicecodename-bp1a-buildtype
+```
 
-Buildbot
---------
+Start compilation
 
-All supported devices are built weekly and periodically as changes are committed to ensure the source trees remain buildable.
+```bash
+mka bacon
+```
 
-You can view the current build statuses at [LineageOS Buildkite](https://buildkite.com/lineageos).
+## Flag Name Maintainer
 
-Builds produced weekly by the buildbot can be downloaded from [LineageOS downloads](https://download.lineageos.org/).
+```bash
+# Maintainer name
+HORIZON_MAINTAINER := YourName
+```
+## Flag Gapps
+```bash
+# By default, the build system compiles a **vanilla** (non-GMS) build. If you want to include **Google Mobile Services (GMS)**, specify the variant:
+WITH_GMS := false
+WITH_GMS := true
+```
+## Purpose
+
+These properties are used for:
+- **Determining wether to use FIFO or legacy boosting for scheduling**.
+- **Affining SurfaceFlinger, HwComposer, and RenderEngine to big cores**.
+
+If your device has a different core configuration, override the values in `lineage_device.mk`.
+
+---
+
+Builders **must** also define if the kernel shipped is modern or not:
+
+```make
+# Define if kernel is modern or not. for e.g if kernel is 4.XX below
+HORIZON_MODERN_KERNEL := false
+```
+
+**Do not use `?=` here**, to make sure that it overrides HorizonDroid defaults
+
+### Important Links
+
+- [Telegram channel](https://t.me/horizondroid)
+- [Telegram group](https://t.me/HorizonDroidChat)
+
+-----------------------------------------------------------------------------
+![CreditsImg](https://github.com/HorizonDroidLabs/horizon/blob/main/credit.svg)
+ Special thanks to All ROM Developers in this community
+ * [**AOSP**](https://android.googlesource.com)
+ * [**LineageOS**](https://github.com/LineageOS)
+ * [**AxionAOSP**](https://github.com/AxionAOSP)
+ * [**CrDroid**](https://github.com/crdroidandroid)
+ * [**EvolutionX**](https://github.com/evolution-x)
+
+-----------------------------------------------------------------------------
+
+ ## Happy Building!
